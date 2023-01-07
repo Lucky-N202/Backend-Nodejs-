@@ -28,7 +28,7 @@ app.use(express.urlencoded({extended: true}));
 const db = require("./app/models");
 const Role = db.role;
 const dbConfig = require('./app/config/db.config');
-const mongoose = require('mongoose');
+
 
 db.mongoose
   .connect(dbConfig, {
@@ -39,6 +39,7 @@ db.mongoose
   (err) => {
     if (err) {
     console.log("error in connection");
+    process.exit();
     } else {
     console.log("mongodb is connected");
     initial();
