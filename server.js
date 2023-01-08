@@ -17,13 +17,14 @@ app.use(express.json());
 
 app.use(express.urlencoded({extended: true}));
 
-// app.use(
-//     cookieSession({
-//         name: 'task-session',
-//         secret: '',
-//         httpOnly: true
-//     })
-// );
+app.use(
+    cookieSession({
+        name: 'task-session',
+        keys: [],
+        secret: process.env.SECRET,
+        httpOnly: true
+    })
+);
 
 const db = require("./app/models");
 const Role = db.role;
