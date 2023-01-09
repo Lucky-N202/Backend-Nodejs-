@@ -1,21 +1,21 @@
 const jwt = require('jsonwebtoken');
-const config = require("../config/auth.config.js");
 const db = require("../models");
 const User = db.user;
 const Role = db.role;
 require('dotenv').config();
 
-verifyToken = (req, res, next) =>{
-    let token = req.session.token;
+verifyToken = async (req, res, next) =>{
+    const token = req.headers.authorization.trim().split(" ")[1];
+    const authHeader = req.headers.authorization;
 
-    if(!token){
-        res.status(403).send({message: "No token provided!"});
+    if(!authHeader){
+       return  res.status(403).send({message: "No token provided!"});
     }
 
     jwt.verify(token, process.env.SECRET_KEY, (err, decoded) =>{
 
         if(err){
-            res.status(401).send({message: "Invalid token!"});
+           return res.status(401).send({message: "Invalid token!"});
         }
         req.userId = decoded.id;
         next();
@@ -23,7 +23,7 @@ verifyToken = (req, res, next) =>{
 
 };
 
-isAdmin = (req, res, next) =>{
+isAdmin = async (req, res, next) =>{
 
     User.findById(req.userId).exec((err, user) =>{
         
@@ -57,7 +57,7 @@ isAdmin = (req, res, next) =>{
     });
 };
 
-isModerator = (req, res, next) => {
+isModerator = async (req, res, next) => {
     User.findById(req.userId).exec((err, user) => {
       if (err) {
         res.status(500).send({ message: err });
@@ -93,5 +93,5 @@ isModerator = (req, res, next) => {
     isAdmin,
     isModerator,
   };
-  
+
   module.exports = authJwt;

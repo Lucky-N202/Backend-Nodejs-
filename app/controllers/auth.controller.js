@@ -1,4 +1,3 @@
-const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
 const Role = db.role;
@@ -39,6 +38,7 @@ exports.signup = (req, res) =>{
                         }
             
                         res.send({ message: "User was registered successfully!" });
+                       
                       });
                 }
             );
@@ -100,7 +100,7 @@ exports.signin = (req, res) =>{
             authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
         }
 
-        req.session.token = token;
+      
 
         res.status(200).send({
             id: user._id,
